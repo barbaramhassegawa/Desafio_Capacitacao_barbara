@@ -142,7 +142,7 @@ resource "azurerm_virtual_machine" "main" {
    computer_name  = var.vm
    admin_username = "admaz"
    admin_password = "P12341234!"
-   custom_data = filebase64("${path.module}/setup_docker.sh")
+   custom_data    = filebase64("${path.module}/setup_docker.sh")
   }
   os_profile_linux_config {
     disable_password_authentication = false
@@ -157,17 +157,11 @@ resource "azurerm_virtual_machine_extension" "custom_script" {
   type                 = "CustomScript"
   type_handler_version = "2.0"
 
- settings = <<SETTINGS
+  settings = <<SETTINGS
   {
     "commandToExecute": "echo '<setup_docker.sh>' | base64 -d | sudo bash"
   }
   SETTINGS
-
-  protected_settings = <<PROTECTED_SETTINGS
-    {
-        "commandToExecute": "bash setup_docker.sh"
-    }
-  PROTECTED_SETTINGS
 }
 
 output "public_ip_address" {
